@@ -74,7 +74,7 @@ void setup(){
 }
 
 // --------------------------
-// >> Arduino standard loop()
+// Arduino standard loop()
 // --------------------------
 
 void loop(){
@@ -260,7 +260,7 @@ void debugReport() {
    
 }
 
-// this function called on message complete
+// report the sensor levels
 void reportLevels(){
   
   Serial.print("== SM1 Moisture: ");
@@ -278,6 +278,7 @@ void reportLevels(){
   Serial.print(" ==");
   Serial.println("");
   
+  // visual report when no serial communication
   numbFlashes = (SM1moisturePercent/10); // flashes once for every 10 percent of moisture
   if(numbFlashes > 10) { numbFlashes = 10; } // max 10
   flashNumb = 0;
