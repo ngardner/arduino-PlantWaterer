@@ -133,57 +133,57 @@ void SMprocess() {
   // slow timer for sensors (stepped processing timer)
   // -------------------------------------------
   if ( timerCurrentTime >= SMtimerNext) {
-  
-                // last time it ran
-	        SMtimerLast = timerCurrentTime;
-
-		// sensor process stepping
-		switch(SMprocessStep){
-		case 0: // init
-                  Serial.println("== starting soil moisture process ==");
-		  break;
-		case 1: // powerOn 
-		  SMsensorTimerRateCurrent = SMsensorTimer_powerOn;
-                  Serial.println("== powering on soil moisture ==");
-		  digitalWrite(SM1powerPin,HIGH);
-		  break;
-		case 2: // read 
-		  SMsensorTimerRateCurrent = SMsensorTimer_read;
-                  Serial.println("== reading soil moisture ==");
-		  updateSM();
-		  break;
-		case 3: // powerOff
-		  SMsensorTimerRateCurrent = SMsensorTimer_powerOff;
-                  Serial.println("== powering off soil moisture ==");
-		  digitalWrite(SM1powerPin,LOW);
-		  break;
-		case 4: // check results, and take action
-
-                  Serial.println("== checking soil moisture results ==");
-                  
-                  reportLevels();
-                  
-                  // ground is wet!
-                  if(SM1moistureLevel >= SM1wetLevel) {
-                   Serial.println("== soil is wet ==");
-                   SM1isWet = 1;
-                   SMsensorTimerRateCurrent = SMsensorTimer_sleep;
-                  } else {
-                   // ground is dry!
-                   Serial.println("== soil is dry ==");
-                   SM1isWet = 0;
-                   Serial.println("== switching to watering process ==");
-                   runningProcess = processWatering;
-                   resetWVtimers();
-                  }
-                  
-		  break;
-		}
-
-                // max 5 steps
-                if(SMprocessStep == 4) { SMsensorCycles++; SMprocessStep = 1; } else { SMprocessStep++; }
-                
-                SMtimerNext = SMtimerLast + SMsensorTimerRateCurrent;
+	
+	// last time it ran
+	SMtimerLast = timerCurrentTime;
+	
+	// sensor process stepping
+	switch(SMprocessStep){
+	case 0: // init
+	  Serial.println("== starting soil moisture process ==");
+	  break;
+	case 1: // powerOn 
+	  SMsensorTimerRateCurrent = SMsensorTimer_powerOn;
+	  Serial.println("== powering on soil moisture ==");
+	  digitalWrite(SM1powerPin,HIGH);
+	  break;
+	case 2: // read 
+	  SMsensorTimerRateCurrent = SMsensorTimer_read;
+	  Serial.println("== reading soil moisture ==");
+	  updateSM();
+	  break;
+	case 3: // powerOff
+	  SMsensorTimerRateCurrent = SMsensorTimer_powerOff;
+	  Serial.println("== powering off soil moisture ==");
+	  digitalWrite(SM1powerPin,LOW);
+	  break;
+	case 4: // check results, and take action
+	
+	  Serial.println("== checking soil moisture results ==");
+	  
+	  reportLevels();
+	  
+	  // ground is wet!
+	  if(SM1moistureLevel >= SM1wetLevel) {
+	   Serial.println("== soil is wet ==");
+	   SM1isWet = 1;
+	   SMsensorTimerRateCurrent = SMsensorTimer_sleep;
+	  } else {
+	   // ground is dry!
+	   Serial.println("== soil is dry ==");
+	   SM1isWet = 0;
+	   Serial.println("== switching to watering process ==");
+	   runningProcess = processWatering;
+	   resetWVtimers();
+	  }
+	  
+	  break;
+	}
+	
+	// max 5 steps
+	if(SMprocessStep == 4) { SMsensorCycles++; SMprocessStep = 1; } else { SMprocessStep++; }
+	
+	SMtimerNext = SMtimerLast + SMsensorTimerRateCurrent;
   }
 }
 
